@@ -5,14 +5,14 @@ class Bar {
 public:
 	explicit Bar(int n) : _num(n) {}
 
-	void print() { std::cout << "Bar::_num = " << _num << std::endl; }
+	void print() const { std::cout << "Bar::_num = " << _num << std::endl; }
 
 	int _num;
 };
 
 class Foo {
 public:
-	Foo(const nonoptional_shared_ptr<Bar>& p) : _neverNull(p) {}
+	explicit Foo(const nonoptional_shared_ptr<Bar>& p) : _neverNull(p) {}
 
 	void print() { _neverNull->print(); }
 
@@ -36,6 +36,8 @@ int main(int argc, const char** argv) {
 
 	nonoptional_shared_ptr<Foo> dest2 = make_nonoptional_shared<Foo>(make_nonoptional_shared<Bar>(55));
 	dest2->print();
+
+	std::shared_ptr<Foo> possiblyOptionalAgain = dest2;
 
 	return EXIT_SUCCESS;
 }

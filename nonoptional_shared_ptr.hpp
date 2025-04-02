@@ -29,13 +29,13 @@ public:
 	// Add more methods here that forward shared_ptr methods so it can be used same way.
 
 protected:
-	nonoptional_shared_ptr(const std::shared_ptr<T>& p) : _ptr(p) {}
+	explicit nonoptional_shared_ptr(const std::shared_ptr<T>& p) : _ptr(p) {}
 	std::shared_ptr<T> _ptr;
 
 	template<class B>
 	friend void if_nonnullptr(const std::shared_ptr<B> &possiblyNull, const std::function<void(const nonoptional_shared_ptr<B>&)> &nonnullHandler, const std::function<void(void)> &nullHandler);
-	template<class C, typename... _Args>
-	friend nonoptional_shared_ptr<C> make_nonoptional_shared(_Args&&... __args);
+	template<class C, typename... Args>
+	friend nonoptional_shared_ptr<C> make_nonoptional_shared(Args&&... args);
 };
 
 template<class T>
@@ -56,9 +56,9 @@ static void if_nonnullptr(const std::shared_ptr<T> &possiblyNull, const std::fun
 	}
 }
 
-template<class T, typename... _Args>
-static nonoptional_shared_ptr<T> make_nonoptional_shared(_Args&&... __args) {
-	std::shared_ptr<T> possiblyNull = std::make_shared<T>(std::forward<_Args>(__args)...);
+template<class T, typename... Args>
+static nonoptional_shared_ptr<T> make_nonoptional_shared(Args&&... args) {
+	std::shared_ptr<T> possiblyNull = std::make_shared<T>(std::forward<Args>(args)...);
 	if (!possiblyNull) {
 		throw std::bad_alloc();
 	}
