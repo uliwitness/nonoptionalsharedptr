@@ -3,6 +3,7 @@
 #include <memory>
 #include <functional>
 #include <exception>
+#include "optional_shared_ptr.hpp"
 
 /*  Since shared_ptr may always be nullptr, optional<shared_ptr<T>> makes no sense, that's what it already is.
     But that means we need a non-nullable version of shared_ptr. This file is it.
@@ -18,7 +19,7 @@ template<class T>
 class nonoptional_shared_ptr {
 public:
 	nonoptional_shared_ptr(const nonoptional_shared_ptr<T>& p) : _ptr(p._ptr) {}
-	nonoptional_shared_ptr<T>& operator= (const nonoptional_shared_ptr<T>& p) { _ptr = p._ptr; }
+	nonoptional_shared_ptr<T>& operator= (const nonoptional_shared_ptr<T>& p) { _ptr = p._ptr; return *this; }
 
 	operator std::shared_ptr<T> () { return _ptr; }
 
